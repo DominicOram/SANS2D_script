@@ -1,0 +1,39 @@
+LOCAL i
+#the numSANS is the number of times the loop will run
+LOCAL sansCount = 0 numSANS=20
+
+SETSCRIPTNAME THIS_PROCEDURE()
+
+#this changes the geometry of the sample
+Sample_par width=8 height=8 thickness=1 geometry="Disc"
+
+FAST_SHUTTER /OPEN
+
+i=1
+LOOP
+
+begin/quiet/delayed
+waitfor frames = 1
+change title="TL0p5L35_50LiCl_"+as_string(i)+"_SANS/TRANS"
+#counts for this number of seconds
+sleep 300
+end/IMMEDIATE
+
+i=i+1
+sansCount=sansCount+1
+
+EXITIF ((sansCount >= numSANS))
+
+ENDLOOP
+
+# longer kinetics
+begin/quiet/delayed
+waitfor frames = 1
+change title="TL0p5L35_50LiCl_"+as_string(i)+"_SANS/TRANS"
+#counts for this number of seconds
+sleep 900
+end/IMMEDIATE
+
+FAST_SHUTTER /CLOSE
+
+PRINTN "SCRIPT COMPLETED "
